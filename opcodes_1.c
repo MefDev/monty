@@ -63,7 +63,7 @@ void multiply(stack_t **stack, unsigned int line_number)
 
     tmp = (*stack)->next;
     tmp->n *= (*stack)->n;
-    pop_stack(stack, line_number);
+    pop(stack, line_number);
 }
 
 void nop(stack_t **stack, unsigned int line_number)
