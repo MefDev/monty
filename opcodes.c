@@ -1,92 +1,49 @@
 #include "monty.h"
 
 /**
- * push - Pushes an element onto the stack.
+ * get_opcodes - Retrieves the appropriate function pointer for an opcode.
+ *
+ * @token: Opcode token to compare.
+ * @line_number: Line number of the opcode.
+ * Return: Pointer to the corresponding function.
  */
-void push(stack_t **stack, unsigned int line_number)
+void (*get_opcodes(char *token, uint line_number))(stack_t **, uint)
 {
-    char *arg = strtok(NULL, "\n\t\r ");
-    int n;
+	typedef void (*FunctionPtr)(stack_t **, uint); // Define a type for function pointers
 
-    if (arg == NULL || _isdigit(arg))
-    {
-        fprintf(stderr, "L%d: usage: push integer\n", line_number);
-        exit(EXIT_FAILURE);
-    }
+	// Define the list of supported operations and their corresponding functions
+	struct Operation {
+		char *opcode;
+		FunctionPtr function;
+	};
 
-    n = atoi(arg);
+	struct Operation operations[] = {
+		{"push", push},
+		{"pall", pall},
+		{"pint", pint},
+		{"pop", pop},
+		{"swap", swap},
+		{"nop", nop},
+		{"add", add},
+		{"sub", sub},
+		{"_div", _div},
+		{"mul", mul},
+		{"mod", mod},
+		{NULL, NULL}
+	};
 
-    if (!push_to_stack(stack, n))
-    {
-        fprintf(stderr, "Error: malloc failed\n");
-        exit(EXIT_FAILURE);
-    }
-}
+	// Search for the appropriate function pointer based on the token
+	for (int i = 0; operations[i].opcode != NULL; i++)
+	{
+		if (strcmp(token, operations[i].opcode) == 0)
+		{
+			return (operations[i].function);
+		}
+	}
 
-/**
- * pall - Prints all the values on the stack.
- */
-void pall(stack_t **stack, unsigned int line_number)
-{
-    stack_t *current = *stack;
+	// Print an error message for an unknown instruction and exit
+	fprintf(stderr, "L%d: unknown instruction %s\n", line_number, token);
+	exit(EXIT_FAILURE);
 
-    (void)line_number;
-
-    while (current)
-    {
-        printf("%d\n", current->n);
-        current = current->next;
-    }
-}
-
-/**
- * pint - Prints the value at the top of the stack.
- */
-void pint(stack_t **stack, unsigned int line_number)
-{
-    if (!stack || !*stack)
-    {
-        fprintf(stderr, "L%d: can't pint, stack empty\n", line_number);
-        exit(EXIT_FAILURE);
-    }
-
-    printf("%d\n", (*stack)->n);
-}
-
-/**
- * pop - Removes the top element of the stack.
- */
-void pop(stack_t **stack, unsigned int line_number)
-{
-    stack_t *temp;
-
-    if (!stack || !*stack)
-    {
-        fprintf(stderr, "L%d: can't pop an empty stack\n", line_number);
-        exit(EXIT_FAILURE);
-    }
-
-    temp = *stack;
-    *stack = (*stack)->next;
-    if (*stack)
-        (*stack)->prev = NULL;
-    free(temp);
-}
-
-/**
- * swap - Swaps the top two elements of the stack.
- */
-void swap(stack_t **stack, unsigned int line_number)
-{
-    int temp;
-
-    if (!stack || !*stack || !(*stack)->next)
-    {
-        fprintf(stderr, "L%d: can't swap, stack too short\n", line_number);
-        exit(EXIT_FAILURE);
-    }
-
-    temp = (*stack)->n;
-    (*stack)->n = (*stack)->next->n;
-    (*stack)->next->n = temp;
+	return (NULL);
 }

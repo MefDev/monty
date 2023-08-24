@@ -1,9 +1,20 @@
 #ifndef MOUNTY_H
 #define  MOUNTY_H
+#define _POSIX_C_SOURCE 200809L
+#define _GNU_SOURCE
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <string.h>
+#include <unistd.h>
+#include <ctype.h>
+
+extern int n;
+
+#define uint unsigned int
+
+extern int number;
+#define DELIM "\n\t\r"
+
 /**
  * struct stack_s - doubly linked list representation of a stack (or queue)
  * @n: integer
@@ -13,6 +24,7 @@
  * Description: doubly linked list node structure
  * for stack, queues, LIFO, FIFO
  */
+
 typedef struct stack_s
 {
 	int n;
@@ -28,6 +40,7 @@ typedef struct stack_s
  * Description: opcode and its function
  * for stack, queues, LIFO, FIFO
  */
+
 typedef struct instruction_s
 {
 	char *opcode;
@@ -41,16 +54,24 @@ typedef struct interpreter_s
 	instruction_t *op_func;
 } interpreter_t;
 
-void push(stack_t **stack, unsigned int line_number);
-void pall(stack_t **stack, unsigned int line_number);
-void pint(stack_t **stack, unsigned int line_number);
-void pop(stack_t **stack, unsigned int line_number);
-void swap(stack_t **stack, unsigned int line_number);
-void add(stack_t **stack, unsigned int line_number);
-void sub(stack_t **stack, unsigned int line_number);
-void multiply(stack_t **stack, unsigned int line_number);
-void nop(stack_t **stack, unsigned int line_number);
-void divide(stack_t **stack, unsigned int line_number);
-stack_t *push_to_stack(stack_t **stack, const int value);
-int _isdigit(char *str);
+// Function prototypes
+void push(stack_t **topstack, uint line_number);
+void pall(stack_t **topstack, uint line_number);
+void pint(stack_t **topstack, uint line_number);
+void pop(stack_t **topstack, uint line_number);
+void swap(stack_t **topstack, uint line_number);
+void add(stack_t **topstack, uint line_number);
+void nop(stack_t **topstack, uint line_number);
+void sub(stack_t **topstack, uint line_number);
+void _div(stack_t **topstack, uint line_number);
+void mul(stack_t **topstack, uint line_number);
+void mod(stack_t **topstack, uint line_number);
+
+void open_error(char **argv);
+void int_err(uint line);
+
+void free_stack(stack_t *topstack);
+void exec_cmd(char **argv);
+int is_number(const char *token);
+int is_comment(const char *token);
 #endif
