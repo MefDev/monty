@@ -66,6 +66,7 @@ void sub(stack_t **topstack, uint line_number);
 void _div(stack_t **topstack, uint line_number);
 void mul(stack_t **topstack, uint line_number);
 void mod(stack_t **topstack, uint line_number);
+void (*get_opcodes(char *token, uint line_number))(stack_t **, uint);
 
 void open_error(char **argv);
 void int_err(uint line);
