@@ -1,7 +1,3 @@
-
-#include "monty.h"
-
-
 #include "monty.h"
 
 /**
@@ -11,15 +7,15 @@
  *
  * Return: 0 on success.
  */
-
 int main(int argc, char **argv)
 {
-	if (argc != 2)
-	{
-		fprintf(stderr, "USAGE: monty file\n");
-		return (EXIT_FAILURE);
-	}
-	exec_cmd(argv);
+    if (argc != 2)
+    {
+        fprintf(stderr, "USAGE: monty file\n");
+        return EXIT_FAILURE;
+    }
 
-	return (0);
+    exec_cmd(argv);
+
+    return 0;
 }
