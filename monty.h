@@ -55,7 +55,7 @@ typedef struct interpreter_s
 } interpreter_t;
 
 // Function prototypes
-void push(stack_t **topstack, uint line_number);
+void push(stack_t **topstack, unsigned int line_number);
 void pall(stack_t **topstack, uint line_number);
 void pint(stack_t **topstack, uint line_number);
 void pop(stack_t **topstack, uint line_number);
